@@ -23,109 +23,149 @@ const request = async (req, api) => {
   }
 };
 
+// exports.getMyPosts = async (req, res, next) => {
+//   try {
+//     const result = await request(req, '/posts/my');
+//     const posts = result.data.payload;
+
+//     const postList = posts.map((post) => ({
+//       nickname: post.User.nick,
+//       contentPreview: post.content.substring(0, 50),
+//     }));
+
+//     let html = '<div style="font-family: Arial, sans-serif;">';
+//     html += '<h2 style="text-align: center;">My Posts</h2>';
+//     html += '<ul style="list-style-type: none; padding: 0; margin: 0;">';
+    
+//     postList.forEach((post) => {
+//       html += '<li style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">';
+//       html += `<div style="margin: 0;"><strong>${post.nickname}</div><div> </strong>${post.contentPreview}</div>`;
+//       html += '</li>';
+//     });
+    
+//     html += '</ul>';
+//     html += '</div>';
+
+//     res.send(html);
+//   } catch (error) {
+//     console.error(error);
+//     next(error);
+//   }
+// };
+
+// exports.modifyMyPosts = async (req, res, next) => {
+//   try {
+//     const result = await request(req, '/posts/my');
+//     const posts = result.data.payload;
+
+//     const postList = posts.map((post) => ({
+//       nickname: post.User.nick,
+//       contentPreview: post.content.substring(0, 50),
+//     }));
+
+//     let html = '<div style="font-family: Arial, sans-serif;">';
+//     html += '<h2 style="text-align: center;">My Posts</h2>';
+//     html += '<ul style="list-style-type: none; padding: 0; margin: 0; width:50%">';
+    
+//     postList.forEach((post) => {
+//       html += '<li style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">';
+//       html += `<div style="display:flex; justify-content: space-between; margin-bottom: 10px;">`;
+//       html += `<div style="font-weight: bold;">${post.nickname}</div>`;
+//       html += `<div>`;
+//       html += `<button onClick="/delete" style="margin-right: 5px;">삭제하기</button>`;
+//       html += `<button '${post.content}')" style="margin-right: 5px;">수정하기</button>`;
+//       html += `</div>`;
+//       html += `</div>`;
+//       html += `<div>${post.contentPreview}</div>`;
+//       html += `<textarea id="modifiedContent" style="width: 20%;"></textarea>`;
+
+//       html += '</li>';
+//     });
+    
+//     html += '</ul>';
+//     html += '</div>';
+
+//     res.send(html);
+//   } catch (error) {
+//     console.error(error);
+//     next(error);
+//   }
+// };
+
+// exports.deleteMyPosts = async (req, res, next) => {
+//   try {
+//     const result = await request(req, '/posts/delete');
+//     const posts = result.data.payload;
+
+//     const postList = posts.map((post) => ({
+//       nickname: post.User.nick,
+//       contentPreview: post.content.substring(0, 50),
+//     }));
+
+//     let html = '<div style="font-family: Arial, sans-serif;">';
+//     html += '<h2 style="text-align: center;">My Posts</h2>';
+//     html += '<ul style="list-style-type: none; padding: 0; margin: 0; width:50%">';
+    
+//     postList.forEach((post) => {
+//       html += '<li style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">';
+//       html += `<div style="display:flex; justify-content: space-between; margin-bottom: 10px;">`;
+//       html += `<div style="font-weight: bold;">${post.nickname}</div>`;
+//       html += `<div>`;
+//       // html += `<button onClick="/delete" style="margin-right: 5px;">삭제하기</button>`;
+//       html += `<a href="/delete" style="margin-right: 5px;">Delete</a>`;
+//       html += `<button '${post.content}')" style="margin-right: 5px;">수정하기</button>`;
+//       html += `</div>`;
+//       html += `</div>`;
+//       html += `<div>${post.contentPreview}</div>`;
+//       html += `<textarea id="modifiedContent" style="width: 20%;"></textarea>`;
+
+//       html += '</li>';
+//     });
+    
+//     html += '</ul>';
+//     html += '</div>';
+
+//     res.send(html);
+//   } catch (error) {
+//     console.error(error);
+//     next(error);
+//   }
+// };
+
 exports.getMyPosts = async (req, res, next) => {
   try {
     const result = await request(req, '/posts/my');
-    const posts = result.data.payload;
-
-    const postList = posts.map((post) => ({
-      nickname: post.User.nick,
-      contentPreview: post.content.substring(0, 50),
-    }));
-
-    let html = '<div style="font-family: Arial, sans-serif;">';
-    html += '<h2 style="text-align: center;">My Posts</h2>';
-    html += '<ul style="list-style-type: none; padding: 0; margin: 0;">';
-    
-    postList.forEach((post) => {
-      html += '<li style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">';
-      html += `<div style="margin: 0;"><strong>${post.nickname}</div><div> </strong>${post.contentPreview}</div>`;
-      html += '</li>';
+    res.render('mypost', {
+      twits: result.data.payload,
     });
-    
-    html += '</ul>';
-    html += '</div>';
-
-    res.send(html);
   } catch (error) {
     console.error(error);
     next(error);
   }
 };
 
-exports.modifyMyPosts = async (req, res, next) => {
+
+exports.deletePost = async(req, res, next) => {
   try {
-    const result = await request(req, '/posts/my');
-    const posts = result.data.payload;
-
-    const postList = posts.map((post) => ({
-      nickname: post.User.nick,
-      contentPreview: post.content.substring(0, 50),
-    }));
-
-    let html = '<div style="font-family: Arial, sans-serif;">';
-    html += '<h2 style="text-align: center;">My Posts</h2>';
-    html += '<ul style="list-style-type: none; padding: 0; margin: 0; width:50%">';
-    
-    postList.forEach((post) => {
-      html += '<li style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">';
-      html += `<div style="display:flex; justify-content: space-between; margin-bottom: 10px;">`;
-      html += `<div style="font-weight: bold;">${post.nickname}</div>`;
-      html += `<div>`;
-      html += `<button onClick="/delete" style="margin-right: 5px;">삭제하기</button>`;
-      html += `<button '${post.content}')" style="margin-right: 5px;">수정하기</button>`;
-      html += `</div>`;
-      html += `</div>`;
-      html += `<div>${post.contentPreview}</div>`;
-      html += `<textarea id="modifiedContent" style="width: 20%;"></textarea>`;
-
-      html += '</li>';
+    const result = await request(req, `/post/${encodeURIComponent(req.params.id)}/deletePost`);
+    console.log(result.data);
+    res.render('main', {
+      twits: result.data.payload,
     });
-    
-    html += '</ul>';
-    html += '</div>';
-
-    res.send(html);
   } catch (error) {
     console.error(error);
     next(error);
   }
 };
 
-exports.deleteMyPosts = async (req, res, next) => {
+exports.updatePost = async(req, res, next) => {
   try {
-    const result = await request(req, '/posts/delete');
-    const posts = result.data.payload;
 
-    const postList = posts.map((post) => ({
-      nickname: post.User.nick,
-      contentPreview: post.content.substring(0, 50),
-    }));
-
-    let html = '<div style="font-family: Arial, sans-serif;">';
-    html += '<h2 style="text-align: center;">My Posts</h2>';
-    html += '<ul style="list-style-type: none; padding: 0; margin: 0; width:50%">';
-    
-    postList.forEach((post) => {
-      html += '<li style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">';
-      html += `<div style="display:flex; justify-content: space-between; margin-bottom: 10px;">`;
-      html += `<div style="font-weight: bold;">${post.nickname}</div>`;
-      html += `<div>`;
-      // html += `<button onClick="/delete" style="margin-right: 5px;">삭제하기</button>`;
-      html += `<a href="/delete" style="margin-right: 5px;">Delete</a>`;
-      html += `<button '${post.content}')" style="margin-right: 5px;">수정하기</button>`;
-      html += `</div>`;
-      html += `</div>`;
-      html += `<div>${post.contentPreview}</div>`;
-      html += `<textarea id="modifiedContent" style="width: 20%;"></textarea>`;
-
-      html += '</li>';
+    const result = await request(req, `/posts/${encodeURIComponent(req.params.id)}/updatePost/${encodeURIComponent(req.query.update)}`);
+    console.log(result.data);
+    res.render('main', {
+      twits: result.data.payload,
     });
-    
-    html += '</ul>';
-    html += '</div>';
-
-    res.send(html);
   } catch (error) {
     console.error(error);
     next(error);

@@ -8,6 +8,7 @@ const db = {};
 const sequelize = new Sequelize(
   config.database, config.username, config.password, config,
 );
+//  new Sequelize로 DB 접근 
 
 db.sequelize = sequelize;
 

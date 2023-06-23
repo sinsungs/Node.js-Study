@@ -1,11 +1,15 @@
 const express = require('express');
-const { renderLogin, createDomain } = require('../controllers');
+const { renderLogin, createDomain, reviewCount, reviewList, reviewIsbn, reviewCreate} = require('../controllers');
 const { isLoggedIn } = require('../middlewares');
 
 const router = express.Router();
 
-router.get('/', renderLogin);
+router.get('/1801005', reviewCount);
 
-router.post('/domain', isLoggedIn, createDomain);
+router.get('/reviews1801005', reviewList)
+
+router.get('/reviews1801005/:isbn', reviewIsbn)
+
+router.post('/reviews1801005', reviewCreate)
 
 module.exports = router;

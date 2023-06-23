@@ -1,33 +1,95 @@
 const { v4: uuidv4 } = require('uuid');
-const { User, Domain } = require('../models');
+const { User, Domain, Reviews } = require('../models');
 
-exports.renderLogin = async (req, res, next) => {
+exports.reviewCount = async (req, res, next) => {
+  Reviews.findAndCountAll({ 
+    // where: { userId: res.locals.decoded.id },
+    // include: {
+    //   model: Reviews,
+      // attributes: ['id', 'isbn', 'title', 'comment'],
+    // },
+  })
+    .then((reviews) => {
+      console.log(reviews.count);
+      const 
+      reviewCount = reviews.count
+      res.json({
+        // code: 200,
+        reviewCount
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      return res.status(500).json({
+        code: 500,
+        message: '서버 에러',
+      });
+    });
+}
+
+exports.reviewList = async (req, res, next) => {
+  Reviews.findAll({ 
+    // where: { userId: res.locals.decoded.id },
+    // include: {
+    //   model: Reviews,
+      attributes: ['id', 'isbn', 'title', 'comment'],
+    // },
+  })
+    .then((reviews) => {
+      console.log(reviews);
+      res.json({
+        // code: 200,
+        reviews,
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      return res.status(500).json({
+        code: 500,
+        message: '서버 에러',
+      });
+    });
+}
+
+exports.reviewIsbn = async (req, res, next) => {
+  Reviews.findAll({ 
+    
+    where: {isbn: req.params.isbn},
+    // include: {
+    //   model: Reviews,
+      attributes: ['id', 'isbn', 'title', 'comment'],
+    // },
+  })
+    .then((reviews) => {
+      console.log(reviews);
+      res.json({
+        // code: 200,
+        reviews,
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      return res.status(500).json({
+        code: 500,
+        message: '서버 에러',
+      });
+    });
+}
+
+exports.reviewCreate = async (req, res, next) => {
   try {
-    const user = await User.findOne({
-      where: { id: req.user?.id || null },
-      include: { model: Domain },
+    const review = await Reviews.create({
+      isbn: req.body.isbn,
+      title: req.body.title,
+      comment: req.body.comment,
     });
-    res.render('login', {
-      user,
-      domains: user?.Domains,
+    res.status(200).json({
+      review
     });
-  } catch (err) {
-    console.error(err);
-    next(err);
+    res.redirect('/');
+  } catch (error) {
+    console.error(error);
+    next(error);
   }
 }
 
-exports.createDomain = async (req, res, next) => {
-  try {
-    await Domain.create({
-      UserId: req.user.id,
-      host: req.body.host,
-      type: req.body.type,
-      clientSecret: uuidv4(),
-    });
-    res.redirect('/');
-  } catch (err) {
-    console.error(err);
-    next(err);
-  }
-};

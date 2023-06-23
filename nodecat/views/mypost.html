@@ -99,8 +99,13 @@
     {% for twit in twits %}
     <ul class="post-list">
       <li>
-        <h2>{{twit.User.nick}}</h2>
+        <h2>{{twit.UserId}}</h2>
         <p>{{twit.content}}</p>
+        <form class="update" action="/posts/{{twit.id}}/updatePost">
+          <input type="text" name="update"  placeholder="수정할 글을 입력하세요." >
+          <button>수정하기</button>
+        </form>
+        <button onclick="location.href='/post/{{twit.id}}/deletePost'">삭제하기</button>
       </li>
     </ul>
     <hr>

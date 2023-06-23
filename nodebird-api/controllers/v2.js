@@ -66,21 +66,59 @@ exports.getMyPosts = (req, res) => {
     });
 };
 
-
-exports.deletePost = async(req, res, next) => {
-  const postId = req.params.id;
-
-  try {
-    await Post.destroy({
-      where: { id: postId },
-    });
-
-    res.send('Post deleted successfully');
-  } catch (error) {
+exports.deletePost = async (req, res,next) => {  //글 삭제하기
+  try{
+    const post = await Post.findOne({where: {id:req.params.id}});
+    if(post) {
+      await post.destroy();
+      const posts = await Post.findAll();
+      return res.json({
+        code: 200,
+        payload: posts,
+      });
+    }else { 
+      return res.json({
+        code: 404,
+      message: '해당하는 게시물이 없습니다.',
+      });
+    }
+  } catch(error) {
     console.error(error);
     next(error);
   }
 };
+
+exports.updatePost = async (req, res, next) => {
+  try {
+    const result = await Post.update(
+        {content: req.params.update},
+        {where: {id: req.params.id}}
+      );
+      const posts = await Post.findAll();
+      return res.json({
+        code: 200,
+        payload: posts,
+      });
+    } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+// exports.deletePost = async(req, res, next) => {
+//   const postId = req.params.id;
+
+//   try {
+//     await Post.destroy({
+//       where: { id: postId },
+//     });
+
+//     res.send('Post deleted successfully');
+//   } catch (error) {
+//     console.error(error);
+//     next(error);
+//   }
+// };
 
 // User.destory({
 //   where: { id: 4 }
